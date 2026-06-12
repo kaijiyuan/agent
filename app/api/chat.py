@@ -18,7 +18,6 @@ from app.core.summary.generator import summary_generator
 router = APIRouter()
 
 ENABLE_STREAMING = os.getenv("ENABLE_STREAMING", "true").lower() in {"1", "true", "yes", "on"}
-ENABLE_PLAN_PROPOSAL = os.getenv("ENABLE_PLAN_PROPOSAL", "true").lower() in {"1", "true", "yes", "on"}
 
 # Initialize the agent graph once when the module loads
 agent_graph = build_agent()
@@ -90,29 +89,6 @@ def _build_session_id(task_id: str, session_id: Optional[str]) -> tuple[str, boo
     # 无 session_id，创建新的
     new_time = now.strftime("%H%M%S")
     return f"{task_id}__{today_date}__{new_time}", True
-
-
-def _collect_recent_user_text(messages, limit: int = 6) -> str:
-    chunks = []
-    for msg in reversed(messages or []):
-        if isinstance(msg, HumanMessage):
-            content = msg.content or ""
-            if content:
-                chunks.append(content.strip())
-            if len(chunks) >= limit:
-                break
-    return " ".join(reversed(chunks)).strip()
-
-
-async def _build_plan_proposal(
-    task_id: str,
-    state: dict,
-    fallback_text: str = "",
-    plan_hint: Optional[bool] = None,
-    reply_text: str = "",
-) -> Optional[dict]:
-    # 自动草案已移除，计划草案仅由 plan_node 产出
-    return None
 
 
 def _build_state(request: ChatRequest, task_id: str, session_id: str):

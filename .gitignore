@@ -39,6 +39,9 @@ pnpm-debug.log*
 web/node_modules/
 web/dist/
 web/.vite/
+Design_Web_Dashboard/dist/
+Design_Web_Dashboard/.vite/
+!Design_Web_Dashboard/.env.example
 
 # Generic node_modules (if added elsewhere)
 node_modules/
